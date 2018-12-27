@@ -4,7 +4,10 @@
   "description": "CD/CI with Emojis",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "jest tests/ --detectOpenHandles --logHeapUsage",
+    "coverage": "jest tests/ --detectOpenHandles --coverage",
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -23,5 +26,9 @@
   "bugs": {
     "url": "https://github.com/manuerumx/emoji-ply/issues"
   },
-  "homepage": "https://github.com/manuerumx/emoji-ply#readme"
+  "homepage": "https://github.com/manuerumx/emoji-ply#readme",
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "jest": "^23.6.0"
+  }
 }
