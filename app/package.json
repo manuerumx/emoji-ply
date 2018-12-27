@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "jest tests/ --detectOpenHandles --logHeapUsage",
-    "coverage": "jest tests/ --detectOpenHandles --coverage",
+    "test": "jest tests/",
+    "coverage": "jest tests/ --coverage",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
