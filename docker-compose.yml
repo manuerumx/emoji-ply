@@ -1,0 +1,11 @@
+version: '3'
+services:
+  emoji_ply_app:
+    image: emoji_ply
+    volumes:
+      - ./app:/usr/src/app
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8989:8989
