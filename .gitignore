@@ -61,7 +61,7 @@ typings/
 .next
 
 # Jetbrains editors
-./idea
+.idea/
 
 # Apple
 .DS_STORE
