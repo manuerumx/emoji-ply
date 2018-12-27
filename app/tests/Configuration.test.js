@@ -40,7 +40,7 @@ describe('Test load configuration from Array/ENV', () => {
       "HELLO=World",
     ];
     let n = new Configuration(service);
-    expect(n.getEnvironment([])).toBe('test');
+    expect(n.getEnvironment()).toBe('test');
     expect(n.getVariable("MOCKED_ENV")).toBe("Abc123");
     expect(n.getVariable("FOO")).toBe("Bar");
     expect(n.getVariable("HELLO")).toBe("World");
@@ -54,7 +54,7 @@ describe('Test load configuration from Array/ENV', () => {
     ];
     loadFakeEnv();
     let n = new Configuration(service);
-    expect(n.getEnvironment([])).toBe('test');
+    expect(n.getEnvironment()).toBe('test');
     expect(n.getVariable("MOCKED_ENV")).toBe("Abc123");
     expect(n.getVariable("FOO")).toBe("Bar");
     expect(n.getVariable("HELLO")).toBe("World");
@@ -69,7 +69,7 @@ describe('Test load configuration from Array/ENV', () => {
     ];
     loadFakeEnv();
     let n = new Configuration(service);
-    expect(n.getEnvironment([])).toBe('test');
+    expect(n.getEnvironment()).toBe('test');
     expect(n.getVariable("MOCKED_ENV")).toBe("Abc123");
     expect(n.getVariable("FOO")).toBe("Bar");
     expect(n.getVariable("HELLO")).toBe("World");
@@ -85,10 +85,18 @@ describe('Test load configuration from Array/ENV', () => {
       "HELLO=World",
     ];
     let n = new Configuration(service, service2);
-    expect(n.getEnvironment([])).toBe('test');
+    expect(n.getEnvironment()).toBe('test');
     expect(n.getVariable("MOCKED_ENV")).toBe("Abc123");
     expect(n.getVariable("FOO")).toBe("Bar");
     expect(n.getVariable("HELLO")).toBe("World");
+  });
+
+  test('Try to load malformed env variables', () => {
+    let n = new Configuration(["foo"]);
+
+    expect(() => {
+      n.getVariable('foo');
+    }).toThrow('Unable to find the variable');
   });
 
   function loadFakeEnv() {
