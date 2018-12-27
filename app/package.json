@@ -1,0 +1,27 @@
+{
+  "name": "emoji-ply",
+  "version": "0.0.1",
+  "description": "CD/CI with Emojis",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manuerumx/emoji-ply.git"
+  },
+  "keywords": [
+    "CI",
+    "CD",
+    "Emojis",
+    "Node.js",
+    "Slack",
+    "Github"
+  ],
+  "author": "Manuel Gonzalez Rivera",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/manuerumx/emoji-ply/issues"
+  },
+  "homepage": "https://github.com/manuerumx/emoji-ply#readme"
+}
