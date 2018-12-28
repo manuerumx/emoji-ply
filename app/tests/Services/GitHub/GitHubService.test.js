@@ -7,7 +7,7 @@ const axios = require('axios');
 
 const expected_headers = {
   'Authorization': 'bearer CUSTOM_TOKEN_FOR_GITHUB_API',
-  'Accept': 'application/vnd.github.ocelot-preview+json',
+  'Accept': '',
   'Content-Type': 'application/json'
 };
 
@@ -31,7 +31,7 @@ test('Should getPullRequestInfo return mocked data', async () => {
     .build();
   axios.mockResolvedValue(resp);
 
-  let response = await github_service.getPullRequestInfo();
+  let response = await github_service.getPullRequestInfo('manuerumx', 'emoji-ply', 100);
 
   expect(response.data).toEqual(resp.data);
 });
@@ -45,10 +45,52 @@ test('Should getPullRequestInfo return a mocked error', async () => {
   expect(response).toBeNull();
 });
 
-test('Should returnHeaders include token', () => {
+test('Should getChecksForCommit return mocked data', async()=>{
   const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
   let github_service = new GitHubService(config);
-  let headers = github_service.returnHeaders();
+  let resp = {'data': [{'name':'bob'}]};
+
+  axios.mockResolvedValue(resp);
+
+  let response = await github_service.getChecksForCommit('manuerumx', 'emoji-ply', 'random_sha');
+
+  expect(response.data).toEqual(resp.data);
+});
+
+test('Should getChecksForCommit return a mocked error', async()=>{
+  mockAxiosRejection();
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  let response = await github_service.getChecksForCommit('manuerumx', 'emoji-ply', 'random_sha');
+
+  expect(response).toBeNull();
+});
+
+test('Should mergePullRequest return mocked data', async()=>{
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  let resp = {'data': [{'name':'bob'}]};
+
+  axios.mockResolvedValue(resp);
+
+  let response = await github_service.getChecksForCommit('manuerumx', 'emoji-ply', 'random_sha');
+
+  expect(response.data).toEqual(resp.data);
+});
+
+test('Should mergePullRequest return a mocked error', async()=>{
+  mockAxiosRejection();
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  let response = await github_service.mergePullRequest('manuerumx', 'emoji-ply', 100, 'Merged by test');
+
+  expect(response).toBeNull();
+});
+
+test('Should getHeaders include token', () => {
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  let headers = github_service.getHeaders();
 
   expect(headers).toEqual(expected_headers);
 });
@@ -57,7 +99,7 @@ test('Should buildRequestOptions returns data', () => {
   const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
   let github_service = new GitHubService(config);
   let request_options = github_service.buildRequestOptions(
-    github_service.returnHeaders(),
+    github_service.getHeaders(),
     github_service.getGraphqlUri(),
     'POST', 'data');
 
