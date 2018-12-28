@@ -2,6 +2,7 @@
 
 const GitHubService = require('../../../Services/GitHub/GitHubService');
 const Configuration = require('../../../Configuration');
+const GitHubGraphqlResponseBuilder = require("../../_helpers/GitHubGraphqlResponseBuilder");
 const axios = require('axios');
 
 const expected_headers = {
@@ -22,13 +23,18 @@ jest.mock('axios');
 test('Should getPullRequestInfo return mocked data', async () => {
   const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
   let github_service = new GitHubService(config);
-  const resp = {data: [{name: 'Mocked'}]};
+  const resp = new GitHubGraphqlResponseBuilder.builder('Mocked Test', 'manuerumx', 'emoji-ply', 100)
+    .with_commit_date(new Date().toISOString())
+    .with_labels(['needs_rebase', 'bug'])
+    .with_author('emoji-ply')
+    .with_review('Bob', 'APPROVED', new Date().toISOString())
+    .build();
   axios.mockResolvedValue(resp);
+
   let response = await github_service.getPullRequestInfo();
 
   expect(response.data).toEqual(resp.data);
 });
-
 
 test('Should getPullRequestInfo return a mocked error', async () => {
   mockAxiosRejection();
