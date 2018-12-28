@@ -2,8 +2,8 @@
 
 class GitHubGraphqlResponseBuilder {
 
-  constructor(query) {
-    return query;
+  constructor(response) {
+    return response;
   }
 
   static get builder() {
@@ -38,7 +38,8 @@ class GitHubGraphqlResponseBuilder {
       }
 
       with_changed_files(files) {
-        this.files = files;
+        this.files = [];
+        this.files.push(files);
         return this;
       }
 
