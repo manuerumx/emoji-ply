@@ -11,6 +11,20 @@ class GitHubService {
     this._configuration = configuration;
   }
 
+  async getPullRequestInfo() {
+    let response = null;
+    try {
+      const headers = this.returnHeaders();
+      const url = this.getGraphqlUri();
+      const query_data = '';
+      const request_options = this.buildRequestOptions(headers, url, 'POST', query_data);
+      response = await axios(request_options);
+    } catch (error) {
+      console.error(error);
+    }
+    return response;
+  }
+
   getGraphqlUri() {
     return 'https://api.github.com/graphql';
   }

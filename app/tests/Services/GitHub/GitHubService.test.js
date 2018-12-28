@@ -2,39 +2,61 @@
 
 const GitHubService = require('../../../Services/GitHub/GitHubService');
 const Configuration = require('../../../Configuration');
+const axios = require('axios');
 
-describe('Test suit GitHubService', () => {
+const expected_headers = {
+  'Authorization': 'bearer CUSTOM_TOKEN_FOR_GITHUB_API',
+  'Accept': 'application/vnd.github.ocelot-preview+json',
+  'Content-Type': 'application/json'
+};
 
-  const expected_headers = {
-    'Authorization': 'bearer CUSTOM_TOKEN_FOR_GITHUB_API',
-    'Accept': 'application/vnd.github.ocelot-preview+json',
-    'Content-Type': 'application/json'
-  };
+const expected_request_options = {
+  method: 'POST',
+  headers: expected_headers,
+  data: 'data',
+  url: 'https://api.github.com/graphql'
+};
 
-  const expected_request_options = {
-    method: 'POST',
-    headers: expected_headers,
-    data: 'data',
-    url: 'https://api.github.com/graphql'
-  };
+jest.mock('axios');
 
-  test('Test returnHeaders include token', () => {
-    const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-    let github_service = new GitHubService(config);
-    let headers = github_service.returnHeaders();
+test('Should getPullRequestInfo return mocked data', async () => {
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  const resp = {data: [{name: 'Bob'}]};
+  axios.mockResolvedValue(resp);
+  let response = await github_service.getPullRequestInfo();
 
-    expect(headers).toEqual(expected_headers);
-  });
-
-  test('Test buildRequestOptions returns data', () => {
-    const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-    let github_service = new GitHubService(config);
-    let request_options = github_service.buildRequestOptions(
-      github_service.returnHeaders(),
-      github_service.getGraphqlUri(),
-      'POST', 'data');
-
-    expect(request_options).toEqual(expected_request_options);
-  });
-
+  expect(response.data).toEqual(resp.data);
 });
+
+test('Should getPullRequestInfo return a mocked error', async () => {
+  axios.mockImplementationOnce(() =>
+    Promise.reject({error: true})
+  );
+
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+
+  let response = await github_service.getPullRequestInfo();
+  expect(response).toBeNull();
+});
+
+test('Should returnHeaders include token', () => {
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  let headers = github_service.returnHeaders();
+
+  expect(headers).toEqual(expected_headers);
+});
+
+test('Should buildRequestOptions returns data', () => {
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  let request_options = github_service.buildRequestOptions(
+    github_service.returnHeaders(),
+    github_service.getGraphqlUri(),
+    'POST', 'data');
+
+  expect(request_options).toEqual(expected_request_options);
+});
+
