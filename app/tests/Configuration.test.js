@@ -2,8 +2,6 @@
 
 const Configuration = require('../Configuration');
 
-
-
 describe('Test load configuration from Array/ENV', () => {
 
   const OLD_ENV = process.env;
