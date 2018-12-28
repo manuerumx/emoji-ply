@@ -29,8 +29,7 @@
   "homepage": "https://github.com/manuerumx/emoji-ply#readme",
   "devDependencies": {
     "coveralls": "^3.0.2",
-    "jest": "^23.6.0",
-    "jest-mock-axios": "^2.1.11"
+    "jest": "^23.6.0"
   },
   "dependencies": {
     "axios": "^0.18.0"
