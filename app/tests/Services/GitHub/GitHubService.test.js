@@ -22,22 +22,20 @@ jest.mock('axios');
 test('Should getPullRequestInfo return mocked data', async () => {
   const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
   let github_service = new GitHubService(config);
-  const resp = {data: [{name: 'Bob'}]};
+  const resp = {data: [{name: 'Mocked'}]};
   axios.mockResolvedValue(resp);
   let response = await github_service.getPullRequestInfo();
 
   expect(response.data).toEqual(resp.data);
 });
 
-test('Should getPullRequestInfo return a mocked error', async () => {
-  axios.mockImplementationOnce(() =>
-    Promise.reject({error: true})
-  );
 
+test('Should getPullRequestInfo return a mocked error', async () => {
+  mockAxiosRejection();
   const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
   let github_service = new GitHubService(config);
-
   let response = await github_service.getPullRequestInfo();
+
   expect(response).toBeNull();
 });
 
@@ -60,3 +58,6 @@ test('Should buildRequestOptions returns data', () => {
   expect(request_options).toEqual(expected_request_options);
 });
 
+function mockAxiosRejection() {
+  axios.mockImplementationOnce(() => Promise.reject({error: true}));
+}
