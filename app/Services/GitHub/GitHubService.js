@@ -3,13 +3,32 @@
 const axios = require('axios');
 const Configuration = require('../../Configuration');
 const GraphqlQuery = require('./GraphqlQuery');
+const GitHubParser = require("./GitHubParser");
+const GitHubPullRequestFactory = require("./GitHubPullRequestFactory");
 
 class GitHubService {
+
   /**
    * @param {Configuration} configuration
    */
   constructor(configuration) {
     this._configuration = configuration;
+  }
+
+  async getPullRequest(organization, repository, number) {
+
+    let github_data = await this.getPullRequestInfo(organization, repository, number);
+    let info = github_data.data.repository.pullRequest;
+
+    let sha_commit = GitHubParser.extractInfoFromLastCommit(info);
+    let github_info_checks = await this.getChecksForCommit(organization, repository, sha_commit);
+
+    let files = GitHubParser.parseFiles(info.files.nodes);
+    let reviews = GitHubParser.parseReviews(info.reviews.nodes);
+    let checks = GitHubParser.parseChecks(github_info_checks);
+    let labels = GitHubParser.parseLabels(info.labels.nodes);
+
+    return GitHubPullRequestFactory.buildPullRequestFromGithub(github_data, files, reviews, checks, labels);
   }
 
   async getPullRequestInfo(organization, repository, number) {
