@@ -1,14 +1,12 @@
 'use strict';
 
-const Utils = require('../../utils/Utils');
-
 class GitHubParser {
 
   static parseLabels(github_data) {
     return github_data.reduce((accumulator, current) => {
       accumulator.push(current.name);
       return accumulator;
-    }, []).filter(el => el != undefined);
+    }, []).filter(lb => lb !== undefined);
   }
 
   static parseReviews(github_data) {
@@ -40,15 +38,14 @@ class GitHubParser {
     return github_data.reduce((accumulator, current) => {
       accumulator.push(current.path);
       return accumulator;
-    }, []).filter(el => el != undefined);
+    }, []).filter(fl => fl !== undefined);
   }
 
   static extractInfoFromLastCommit(github_data) {
     let hashed_commit = Buffer.from(github_data.commits.nodes[0].id, 'Base64').toString();
     let commit_array = hashed_commit.split(':');
     let reversed_array = commit_array.reverse();
-    let hash = reversed_array[0];
-    return hash;
+    return reversed_array[0];
   }
 
   static extractLastCommitDate(github_data) {

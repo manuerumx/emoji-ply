@@ -1,15 +1,37 @@
 'use strict';
 
 const axios = require('axios');
-const Configuration = require('../../Configuration');
+const Configuration = require('../../../Configuration');
 const GraphqlQuery = require('./GraphqlQuery');
+const GitHubParser = require("./GitHubParser");
+const GitHubPullRequestFactory = require("./GitHubPullRequestFactory");
 
 class GitHubService {
+
   /**
    * @param {Configuration} configuration
    */
   constructor(configuration) {
     this._configuration = configuration;
+  }
+
+  async getPullRequest(organization, repository, number) {
+    let github_data = await this.getPullRequestInfo(organization, repository, number);
+    if (github_data.hasOwnProperty('errors')) {
+      return GitHubPullRequestFactory.buildPullRequestFromGithub({}, undefined, undefined, undefined, undefined, undefined);
+    }
+    let info = github_data.data.repository.pullRequest;
+
+    let sha_commit = GitHubParser.extractInfoFromLastCommit(info);
+    let github_info_checks = await this.getChecksForCommit(organization, repository, sha_commit);
+
+    let files = GitHubParser.parseFiles(info.files.nodes);
+    let reviews = GitHubParser.parseReviews(info.reviews.nodes);
+    let checks = GitHubParser.parseChecks(github_info_checks);
+    let labels = GitHubParser.parseLabels(info.labels.nodes);
+    let commit_pushed_at = GitHubParser.extractLastCommitDate(info);
+
+    return GitHubPullRequestFactory.buildPullRequestFromGithub(info, files, reviews, checks, labels, commit_pushed_at);
   }
 
   async getPullRequestInfo(organization, repository, number) {

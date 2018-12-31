@@ -22,14 +22,9 @@ class GitHubGraphqlResponseBuilder {
         this.closed_status = false;
         this.author = 'manuerumx';
         this.files = ['Readme.md', '.gitignore'];
-        this.labels = ['Good'];
+        this.labels = [];
         this.reviews = [];
-        this.commits = [{
-          "id": "MDE3OlB1bGxSZXF1ZXN0Q29tbWl0MjQxMDE0MzI1OjE1NmUxYzVjYWY2NzExNjVmMjY0NDBlMzJlMGRjYzIwN2JlMDEzN2M=",
-          "commit": {
-            "pushedDate": new Date().toISOString()
-          }
-        }];
+        this.commits = [];
       }
 
       with_author(author) {
@@ -38,8 +33,7 @@ class GitHubGraphqlResponseBuilder {
       }
 
       with_changed_files(files) {
-        this.files = [];
-        this.files.push(files);
+        this.files = this.files.concat(files);
         return this;
       }
 
@@ -107,6 +101,14 @@ class GitHubGraphqlResponseBuilder {
       }
 
       build() {
+        if (this.commits.length === 0) {
+          this.commits.push({
+            "id": "MDE3OlB1bGxSZXF1ZXN0Q29tbWl0MjQxMDE0MzI1OjE1NmUxYzVjYWY2NzExNjVmMjY0NDBlMzJlMGRjYzIwN2JlMDEzN2M=",
+            "commit": {
+              "pushedDate": new Date().toISOString()
+            }
+          });
+        }
         let query = {
           "data": {
             "repository": {

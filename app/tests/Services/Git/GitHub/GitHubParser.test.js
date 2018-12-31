@@ -1,8 +1,8 @@
 'use strict';
 
-const GitHubParser = require('../../../Services/GitHub/GitHubParser');
-const GitHubGraphqlResponseBuilder = require("../../_helpers/GitHubGraphqlResponseBuilder");
-const GitHubChecksResponseBuilder = require('../../_helpers/GitHubChecksResponseBuilder');
+const GitHubParser = require('../../../../Services/Git/GitHub/GitHubParser');
+const GitHubGraphqlResponseBuilder = require("../../../_helpers/GitHubGraphqlResponseBuilder");
+const GitHubChecksResponseBuilder = require('../../../_helpers/GitHubChecksResponseBuilder');
 
 const commit_date = new Date().toISOString();
 const review_date = new Date().toISOString();
