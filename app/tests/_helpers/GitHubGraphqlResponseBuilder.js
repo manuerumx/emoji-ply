@@ -33,8 +33,7 @@ class GitHubGraphqlResponseBuilder {
       }
 
       with_changed_files(files) {
-        this.files = [];
-        this.files.push(files);
+        this.files = this.files.concat(files);
         return this;
       }
 
