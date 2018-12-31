@@ -1,7 +1,7 @@
 'use strict';
 
 const axios = require('axios');
-const Configuration = require('../../Configuration');
+const Configuration = require('../../../Configuration');
 const GraphqlQuery = require('./GraphqlQuery');
 const GitHubParser = require("./GitHubParser");
 const GitHubPullRequestFactory = require("./GitHubPullRequestFactory");
@@ -17,6 +17,9 @@ class GitHubService {
 
   async getPullRequest(organization, repository, number) {
     let github_data = await this.getPullRequestInfo(organization, repository, number);
+    if (github_data.hasOwnProperty('errors')) {
+      return GitHubPullRequestFactory.buildPullRequestFromGithub({}, undefined, undefined, undefined, undefined, undefined);
+    }
     let info = github_data.data.repository.pullRequest;
 
     let sha_commit = GitHubParser.extractInfoFromLastCommit(info);

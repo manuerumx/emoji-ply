@@ -1,11 +1,11 @@
 'use strict';
 
 const CONSTANT = require("./GitHubConstants");
-const Utils = require('../../utils/Utils');
-const ARCHITECTS = [];
-const SENSITIVE_FILES = [];
-const SENSITIVE_PATHS = [];
-const SENSITIVE_LABELS = [];
+const Utils = require('../../../utils/Utils');
+const ARCHITECTS = ['manuerumx'];
+const SENSITIVE_FILES = ['package.json'];
+const SENSITIVE_PATHS = ['app/sensitive'];
+const SENSITIVE_LABELS = ['bug', 'needs rebase', 'error', 'needs help'];
 
 
 class GitHubValidator {
@@ -67,7 +67,7 @@ class GitHubValidator {
   }
 
   static _isFileInSensitivePath(file) {
-    return SENSITIVE_FILES.some(fl => file.indexOf(fl) !== -1);
+    return SENSITIVE_PATHS.some(fl => file.indexOf(fl) !== -1);
   }
 
   static _hasSensitiveLabels(labels) {

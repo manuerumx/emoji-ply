@@ -2,12 +2,12 @@
 
 class PullRequest {
   constructor(){
-    
+    this.isFoundOnRemote = undefined;
     this.isMerged = undefined;
     this.author = undefined;
     this.url = undefined;
     this.branch =undefined;
-    this.target =undefined;
+    this.targetBranch =undefined;
     this.isClosed = undefined;
     this.hasCiApproval = undefined;
     this.isSensitive = undefined;
