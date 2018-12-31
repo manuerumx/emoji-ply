@@ -6,10 +6,10 @@ const CONSTANT = require('./GitHubConstants');
 
 class GitHubPullRequestFactory {
 
-  static buildPullRequestFromGithub(info, files, reviews, checks, labels) {
+  static buildPullRequestFromGithub(info, files, reviews, checks, labels, commit_pushed_at) {
     let instance = new PullRequest();
     instance.isMerged = info.merged;
-    instance.author = info.author;
+    instance.author = info.author.login;
     instance.url = info.url;
     instance.branch = info.headRefName;
     instance.target = info.baseRefName;
@@ -17,12 +17,12 @@ class GitHubPullRequestFactory {
     instance.hasCiApproval = checks.conclusion === CONSTANT.CHECKS_SUCCESS_CONCLUSION;
     instance.isSensitive = GitHubValidator._hasSensitiveFilesAltered(files);
     instance.hasReviewByArchitect = GitHubValidator._hasReviewByArchitect(reviews);
-    instance.hasReviewByArchitectAfterPush = false;
+    instance.hasReviewByArchitectAfterPush = GitHubValidator._hasReviewByArchitectAfterPush(reviews, commit_pushed_at);
     instance.hasRequestedChanges = GitHubValidator._hasRequestedChanges(reviews);
     instance.hasReviews = reviews.length > 0;
     instance.hasConflicts = info.mergeable === CONSTANT.STATUS_CONFLICTING;
-    instance.hasPushAfterReview = false;
-    instance.commitPushedAt = info.commitPushedAt;
+    instance.hasPushAfterReview = GitHubValidator._hasPushedAfterReview(reviews, commit_pushed_at);
+    instance.commitPushedAt = commit_pushed_at;
     instance.hasLabels = GitHubValidator._hasSensitiveLabels(labels);
 
     instance.canBeMerged = true;

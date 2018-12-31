@@ -16,7 +16,6 @@ class GitHubService {
   }
 
   async getPullRequest(organization, repository, number) {
-
     let github_data = await this.getPullRequestInfo(organization, repository, number);
     let info = github_data.data.repository.pullRequest;
 
@@ -27,8 +26,9 @@ class GitHubService {
     let reviews = GitHubParser.parseReviews(info.reviews.nodes);
     let checks = GitHubParser.parseChecks(github_info_checks);
     let labels = GitHubParser.parseLabels(info.labels.nodes);
+    let commit_pushed_at = GitHubParser.extractLastCommitDate(info);
 
-    return GitHubPullRequestFactory.buildPullRequestFromGithub(github_data, files, reviews, checks, labels);
+    return GitHubPullRequestFactory.buildPullRequestFromGithub(info, files, reviews, checks, labels, commit_pushed_at);
   }
 
   async getPullRequestInfo(organization, repository, number) {

@@ -17,7 +17,7 @@ class GitHubValidator {
       let already_listed = requested_changes.includes(review.author);
 
       if (review.state === CONSTANT.APPROVED && already_listed) {
-        requested_changes.splice(requested_changes.indexOf((el)), 1);
+        requested_changes.splice(requested_changes.indexOf((review.author)), 1);
       }
 
       if (review.state === CONSTANT.REQUESTED_CHANGES && !already_listed) {
@@ -35,9 +35,17 @@ class GitHubValidator {
   }
 
   static _hasReviewByArchitectAfterPush(reviews, commit_date) {
+    let has_review = reviews.filter((review) => {
+      return new Date(review.createdAt) >= new Date(commit_date) && review.state === CONSTANT.APPROVED && GitHubValidator._isAnArchitect(review.author);
+    });
+    return has_review.length >= 1;
   }
 
   static _hasPushedAfterReview(reviews, commit_date) {
+    let commited = new Date(commit_date);
+    return reviews.reduce((has_pushed, review) => {
+      return has_pushed || commited >= new Date(review.createdAt);
+    }, false);
   }
 
   static _isAnArchitect(user) {

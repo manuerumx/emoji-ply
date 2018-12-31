@@ -4,6 +4,7 @@ const GitHubService = require('../../../Services/GitHub/GitHubService');
 const Configuration = require('../../../Configuration');
 const GitHubGraphqlResponseBuilder = require("../../_helpers/GitHubGraphqlResponseBuilder");
 const axios = require('axios');
+const GitHubChecksResponseBuilder = require("../../_helpers/GitHubChecksResponseBuilder");
 
 const expected_headers = {
   'Authorization': 'bearer CUSTOM_TOKEN_FOR_GITHUB_API',
@@ -20,6 +21,27 @@ const expected_request_options = {
 
 jest.mock('axios');
 
+test('Should getPullRequest and return a PullRequest entity', async()=> {
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  const resp = new GitHubGraphqlResponseBuilder.builder('Mocked Test', 'manuerumx', 'emoji-ply', 100)
+    .with_commit_date(new Date().toISOString())
+    .with_labels(['needs_rebase', 'bug'])
+    .with_author('emoji-ply')
+    .with_review('Bob', 'APPROVED', new Date().toISOString())
+    .build();
+  const resp2 = new GitHubChecksResponseBuilder.builder()
+    .with_check('success', 'ok', new Date().toISOString()).build();
+  axios
+    .mockResolvedValueOnce(resp)
+    .mockResolvedValueOnce(resp2);
+
+  let response = await github_service.getPullRequest('manuerumx', 'emoji-ply', 100);
+
+
+  expect(true).toBeTruthy();
+});
+
 test('Should getPullRequestInfo return mocked data', async () => {
   const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
   let github_service = new GitHubService(config);
@@ -29,8 +51,7 @@ test('Should getPullRequestInfo return mocked data', async () => {
     .with_author('emoji-ply')
     .with_review('Bob', 'APPROVED', new Date().toISOString())
     .build();
-  axios.mockResolvedValue(resp);
-
+  axios.mockResolvedValueOnce(resp);
   let response = await github_service.getPullRequestInfo('manuerumx', 'emoji-ply', 100);
 
   expect(response.data).toEqual(resp.data);
@@ -50,7 +71,7 @@ test('Should getChecksForCommit return mocked data', async()=>{
   let github_service = new GitHubService(config);
   let resp = {'data': [{'name':'bob'}]};
 
-  axios.mockResolvedValue(resp);
+  axios.mockResolvedValueOnce(resp);
 
   let response = await github_service.getChecksForCommit('manuerumx', 'emoji-ply', 'random_sha');
 
