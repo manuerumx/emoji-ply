@@ -68,6 +68,35 @@ test('Should get a PullRequest ready to be merged', async () => {
 
 });
 
+test('Should get a PullRequest and hasReviewByArchitectAfterPush should be true', async()=> {
+  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+  let github_service = new GitHubService(config);
+  const resp = new GitHubGraphqlResponseBuilder.builder('HasReviewByArchitect', 'manuerumx', 'emoji-ply', 100)
+    .with_author('emoji-ply')
+    .with_commit_date('2019-01-08T17:00:00.067Z')
+    .with_labels(['Good'])
+    .with_changed_files(['index.js', 'package.json', 'app/data/controller.js'])
+    .with_review('manuerumx', 'APPROVED', '2019-01-08T17:05:00.067Z')
+    .with_commit_date('2019-01-08T17:10:00.067Z')
+    .with_review('bob', 'APPROVED', '2019-01-08T17:15:00.067Z')
+    .with_state('OPEN')
+    .build();
+
+  const resp2 = new GitHubChecksResponseBuilder.builder()
+    .with_check('finished', 'success', '2019-01-08T17:20:00.067Z').build();
+
+  axios
+    .mockResolvedValueOnce(resp)
+    .mockResolvedValueOnce(resp2);
+
+  let response = await github_service.getPullRequest('manuerumx', 'emoji-ply', 100);
+  expect(response.reason).toBe('The pull request modifies sensitive files and is required the review of an architect after the last push');
+  expect(response.isMerged).toBeFalsy();
+  expect(response.canBeMerged).toBeFalsy();
+  expect(response.author).toBe('emoji-ply');
+  expect(response.hasReviews).toBeTruthy();
+});
+
 test('Should get a PullRequest ready to be merged but too old', async () => {
   const base_date = new Date();
   const commit_date = new Date(base_date.setTime(base_date.getTime() - 600000000)).toISOString();

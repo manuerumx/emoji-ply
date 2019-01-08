@@ -42,10 +42,11 @@ class GitHubValidator {
   }
 
   static _hasPushedAfterReview(reviews, commit_date) {
-    let commited = new Date(commit_date);
-    return reviews.reduce((has_pushed, review) => {
-      return has_pushed || commited >= new Date(review.createdAt);
-    }, false);
+    let has_pushed = false;
+    reviews.forEach((review) => {
+      has_pushed = new Date(commit_date) > new Date(review.createdAt);
+    });
+    return has_pushed;
   }
 
   static _isAnArchitect(user) {

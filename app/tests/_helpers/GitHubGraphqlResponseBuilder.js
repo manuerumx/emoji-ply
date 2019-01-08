@@ -96,13 +96,13 @@ class GitHubGraphqlResponseBuilder {
             "pushedDate": commit_date
           }
         };
-        this.commits.push(commit);
+        this.commits.unshift(commit);
         return this;
       }
 
       build() {
         if (this.commits.length === 0) {
-          this.commits.push({
+          this.commits.unshift({
             "id": "MDE3OlB1bGxSZXF1ZXN0Q29tbWl0MjQxMDE0MzI1OjE1NmUxYzVjYWY2NzExNjVmMjY0NDBlMzJlMGRjYzIwN2JlMDEzN2M=",
             "commit": {
               "pushedDate": new Date().toISOString()
