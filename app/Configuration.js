@@ -8,7 +8,7 @@ class Configuration extends EnvLoader {
    */
   constructor(...services) {
     super();
-    this.services = services || [];
+    this.services = services;
     this.addProperty('environment', process.env.ENV || 'test');
     this.processServicesVariables();
   }

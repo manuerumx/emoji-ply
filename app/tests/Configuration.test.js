@@ -21,6 +21,7 @@ afterEach(() => {
 test('Load environment variable', () => {
   let config = new Configuration();
   expect(config.getEnvironment([])).toBe('test');
+  expect(config.services).toEqual([]);
 });
 
 
