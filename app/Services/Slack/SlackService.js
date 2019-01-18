@@ -15,7 +15,12 @@ class SlackService {
   }
 
   async sendMessage(message, channel) {
-
+    let options = {
+      channel: channel,
+      text: message
+    };
+    let request_options = this.buildRequestOptions(this.getRequestHeaders(true), "POST", options);
+    return await this.processRequest(request_options);
   }
 
   sendMessageAsReplyTo() {
@@ -45,8 +50,14 @@ class SlackService {
   throttleRequests() {
   }
 
-  asyncprocessRequest() {
-
+  async processRequest(request_options) {
+    let response = null;
+    try {
+      response = await axios(request_options);
+    } catch (error) {
+      response = error;
+    }
+    return response;
   }
 
   buildRequestOptions(headers, method, raw_data) {
