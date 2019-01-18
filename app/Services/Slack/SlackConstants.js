@@ -23,24 +23,3 @@ module.exports = Object.freeze({
   REACTION_DEPLOYING: 'champagne',
   REQUEST_RATE_LIMIT: 300
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

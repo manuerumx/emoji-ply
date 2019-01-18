@@ -77,7 +77,7 @@ class SlackService {
    */
   async getChannelHistory(channel = SLACK_CONSTANTS.CHANNEL_DEPLOY, qty = 50, public_channel = true) {
     const api_namespace = public_channel ? 'channels' : 'groups';
-    const uri_params = `${api_namespace}history?channel=${channel}&count=${count}`;
+    const uri_params = `${api_namespace}history?channel=${channel}&count=${qty}`;
     let headers = this.getRequestHeaders(false);
     let request_options = this.buildRequestOptions(uri_params, headers, 'GET', null);
 
@@ -146,12 +146,12 @@ class SlackService {
 
   /**
    * @see https://api.slack.com/methods/reactions.add
-   * @param thread_ts
-   * @param channel
-   * @param reaction
+   * @param channel {string}
+   * @param thread_ts {string}
+   * @param reaction {string}
    * @returns {Promise<*>}
    */
-  async reactToMessage(thread_ts, channel, reaction) {
+  async reactToMessage(channel, thread_ts, reaction) {
     let headers = this.getRequestHeaders(true);
     let options = {
       channel: channel,
@@ -164,12 +164,12 @@ class SlackService {
 
   /**
    * @see https://api.slack.com/methods/reactions.remove
-   * @param thread_ts
-   * @param channel
-   * @param reaction
+   * @param channel {string}
+   * @param thread_ts {string}
+   * @param reaction {string}
    * @returns {Promise<*>}
    */
-  async removeReactionToMessage(thread_ts, channel, reaction) {
+  async removeReactionToMessage(channel, thread_ts, reaction) {
     let headers = this.getRequestHeaders(true);
     let options = {
       channel: channel,
