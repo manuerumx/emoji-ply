@@ -14,7 +14,7 @@ class EnvLoader {
 
   getVariable(name) {
     if (this.hasOwnProperty(name)) {
-      return this[name]
+      return this[name];
     }
     throw 'Unable to find the variable';
   }

@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const axios = require('axios');
-const Configuration = require('../../../Configuration');
-const GraphqlQuery = require('./GraphqlQuery');
+const axios = require("axios");
+const Configuration = require("../../../Configuration");
+const GraphqlQuery = require("./GraphqlQuery");
 const GitHubParser = require("./GitHubParser");
 const GitHubPullRequestFactory = require("./GitHubPullRequestFactory");
 
@@ -17,7 +17,7 @@ class GitHubService {
 
   async getPullRequest(organization, repository, number) {
     let github_data = await this.getPullRequestInfo(organization, repository, number);
-    if (github_data.hasOwnProperty('errors')) {
+    if (github_data.hasOwnProperty("errors")) {
       return GitHubPullRequestFactory.buildPullRequestFromGithub({}, undefined, undefined, undefined, undefined, undefined);
     }
     let info = github_data.data.repository.pullRequest;
@@ -40,8 +40,8 @@ class GitHubService {
       const url = this.getGraphqlUri();
       let headers = this.getHeaders();
       const query_data = GraphqlQuery(organization, repository, number);
-      headers.Accept = 'application/vnd.github.ocelot-preview+json';
-      const request_options = this.buildRequestOptions(headers, url, 'POST', query_data);
+      headers.Accept = "application/vnd.github.ocelot-preview+json";
+      const request_options = this.buildRequestOptions(headers, url, "POST", query_data);
 
       response = await axios(request_options);
     } catch (error) {
@@ -55,8 +55,8 @@ class GitHubService {
     try {
       const uri = `https://api.github.com/repos/${organization}/${repository}/commits/${sha_commit}/check-runs`;
       let headers = this.getHeaders();
-      headers.Accept = 'application/vnd.github.antiope-preview+json';
-      const request_options = this.buildRequestOptions(headers, uri, 'GET', null);
+      headers.Accept = "application/vnd.github.antiope-preview+json";
+      const request_options = this.buildRequestOptions(headers, uri, "GET", null);
 
       response = await axios(request_options);
     } catch (error) {
@@ -73,7 +73,7 @@ class GitHubService {
       let body = {
         "commit_title": message
       };
-      const request_options = this.buildRequestOptions(headers, uri, 'PUT', JSON.stringify(body));
+      const request_options = this.buildRequestOptions(headers, uri, "PUT", JSON.stringify(body));
 
       response = await axios(request_options);
     } catch (error) {
@@ -83,23 +83,23 @@ class GitHubService {
   }
 
   getGraphqlUri() {
-    return 'https://api.github.com/graphql';
+    return "https://api.github.com/graphql";
   }
 
   getHeaders() {
     return {
-      'Authorization': 'bearer ' + this._configuration.getVariable('GITHUB_TOKEN'),
-      'Accept': '',
-      'Content-Type': 'application/json'
+      "Authorization": "bearer " + this._configuration.getVariable("GITHUB_TOKEN"),
+      "Accept": "",
+      "Content-Type": "application/json"
     };
   }
 
-  buildRequestOptions(headers, uri, method, raw_data) {
+  buildRequestOptions(headers, url, method, data) {
     return {
-      method: method,
-      headers: headers,
-      data: raw_data,
-      url: uri
+      method,
+      headers,
+      data,
+      url
     };
   }
 

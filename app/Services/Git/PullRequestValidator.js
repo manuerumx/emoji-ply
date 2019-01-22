@@ -19,7 +19,7 @@ class PullRequestValidator {
     }
 
     if (pull_request.isClosed) {
-      return [false, 'The pull request is closed'];
+      return [false, "The pull request is closed"];
     }
 
     if (!pull_request.hasReviews) {

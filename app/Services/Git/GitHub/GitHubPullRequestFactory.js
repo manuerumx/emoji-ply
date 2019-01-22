@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const PullRequest = require('../PullRequest');
-const PullRequestValidator = require('../PullRequestValidator');
-const GitHubValidator = require('./GitHubValidator');
-const CONSTANT = require('./GitHubConstants');
+const PullRequest = require("../PullRequest");
+const PullRequestValidator = require("../PullRequestValidator");
+const GitHubValidator = require("./GitHubValidator");
+const CONSTANT = require("./GitHubConstants");
 
 class GitHubPullRequestFactory {
 
@@ -32,7 +32,7 @@ class GitHubPullRequestFactory {
       [instance.canBeMerged, instance.reason] = PullRequestValidator.checkCanBeMerged(instance);
     } else {
       instance.isFoundOnRemote = false;
-      instance.reason = 'The requested pull cannot be found';
+      instance.reason = "The requested pull cannot be found";
     }
 
 

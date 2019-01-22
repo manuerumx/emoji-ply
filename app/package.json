@@ -3,11 +3,18 @@
   "version": "0.0.1",
   "description": "CD/CI with Emojis",
   "main": "index.js",
+  "eslintConfig": {
+    "env": {
+      "browser": false,
+      "node": true
+    }
+  },
   "scripts": {
     "start": "node index.js",
     "test": "jest",
     "coverage": "jest --coverage",
-    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "codacy": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage"
   },
   "repository": {
     "type": "git",
@@ -28,6 +35,7 @@
   },
   "homepage": "https://github.com/manuerumx/emoji-ply#readme",
   "devDependencies": {
+    "codacy-coverage": "^3.4.0",
     "coveralls": "^3.0.2",
     "jest": "^23.6.0"
   },

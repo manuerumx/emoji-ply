@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const EnvLoader = require('./EnvLoader');
+const EnvLoader = require("./EnvLoader");
 
 class Configuration extends EnvLoader {
   /**
@@ -9,12 +9,12 @@ class Configuration extends EnvLoader {
   constructor(...services) {
     super();
     this.services = services;
-    this.addProperty('environment', process.env.ENV || 'test');
+    this.addProperty("environment", process.env.ENV || "test");
     this.processServicesVariables();
   }
 
   getEnvironment() {
-    return this.getVariable('environment');
+    return this.getVariable("environment");
   }
 
   processServicesVariables() {

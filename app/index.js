@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
-console.log('emoji-ply');
+console.log("emoji-ply");
 process.exit(0);

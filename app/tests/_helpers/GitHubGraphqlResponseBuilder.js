@@ -131,7 +131,7 @@ class GitHubGraphqlResponseBuilder {
                 "deletions": this.deletions,
                 "files": {
                   "nodes": this.files.map(fl => {
-                    return {"path": fl}
+                    return {"path": fl};
                   })
                 },
                 "reviews": {
@@ -139,7 +139,7 @@ class GitHubGraphqlResponseBuilder {
                 },
                 "labels": {
                   "nodes": this.labels.map(fl => {
-                    return {"name": fl}
+                    return {"name": fl};
                   })
                 },
                 "commits": {

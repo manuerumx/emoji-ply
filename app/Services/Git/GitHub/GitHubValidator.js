@@ -72,7 +72,7 @@ class GitHubValidator {
   }
 
   static _hasSensitiveLabels(labels) {
-    return Utils.isSomeInOtherArray(SENSITIVE_LABELS, labels)
+    return Utils.isSomeInOtherArray(SENSITIVE_LABELS, labels);
   }
 }
 

@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const Configuration = require('../Configuration');
+const Configuration = require("../Configuration");
 const OLD_ENV = process.env;
 
 beforeEach(() => {
@@ -18,22 +18,22 @@ afterEach(() => {
   process.env = OLD_ENV;
 });
 
-test('Load environment variable', () => {
+test("Load environment variable", () => {
   let config = new Configuration();
-  expect(config.getEnvironment([])).toBe('test');
+  expect(config.getEnvironment([])).toBe("test");
   expect(config.services).toEqual([]);
 });
 
 
-test('Fail load environment variable', () => {
+test("Fail load environment variable", () => {
   let config = new Configuration();
 
   expect(() => {
-    config.getVariable('foo');
-  }).toThrow('Unable to find the variable');
+    config.getVariable("foo");
+  }).toThrow("Unable to find the variable");
 });
 
-test('Load custom variables from array', () => {
+test("Load custom variables from array", () => {
   let service = [
     "MOCKED_ENV=Abc123",
     "FOO=Bar",
@@ -44,7 +44,7 @@ test('Load custom variables from array', () => {
   assertResults(config);
 });
 
-test('Load custom variables from ENV', () => {
+test("Load custom variables from ENV", () => {
   let service = [
     "MOCKED_ENV=###",
     "FOO=###",
@@ -56,7 +56,7 @@ test('Load custom variables from ENV', () => {
   assertResults(config);
 });
 
-test('Load custom variables from mixed origin (env and array)', () => {
+test("Load custom variables from mixed origin (env and array)", () => {
   let service = [
     "MOCKED_ENV=###",
     "FOO=###",
@@ -70,7 +70,7 @@ test('Load custom variables from mixed origin (env and array)', () => {
   expect(config.getVariable("NYAN")).toBe("Cat");
 });
 
-test('Load custom variables from two arrays', () => {
+test("Load custom variables from two arrays", () => {
   let service = [
     "MOCKED_ENV=Abc123",
     "FOO=Bar",
@@ -84,23 +84,23 @@ test('Load custom variables from two arrays', () => {
   assertResults(config);
 });
 
-test('Try to load malformed env variables', () => {
+test("Try to load malformed env variables", () => {
   let config = new Configuration(["foo"]);
 
   expect(() => {
-    config.getVariable('foo');
-  }).toThrow('Unable to find the variable');
+    config.getVariable("foo");
+  }).toThrow("Unable to find the variable");
 });
 
 function assertResults(n) {
-  expect(n.getEnvironment()).toBe('test');
+  expect(n.getEnvironment()).toBe("test");
   expect(n.getVariable("MOCKED_ENV")).toBe("Abc123");
   expect(n.getVariable("FOO")).toBe("Bar");
   expect(n.getVariable("HELLO")).toBe("World");
 }
 
 function loadFakeEnv() {
-  process.env.MOCKED_ENV = 'Abc123';
-  process.env.FOO = 'Bar';
-  process.env.HELLO = 'World';
+  process.env.MOCKED_ENV = "Abc123";
+  process.env.FOO = "Bar";
+  process.env.HELLO = "World";
 }

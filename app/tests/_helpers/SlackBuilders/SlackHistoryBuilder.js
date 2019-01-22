@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const SlackApiResponseBuilder = require('../SlackApiResponseBuilder');
+const SlackApiResponseBuilder = require("../SlackApiResponseBuilder");
 
 class SlackHistoryBuilder {
 

@@ -49,7 +49,7 @@ module.exports = (organization, repository, number) => {
   }\
 }`;
   let _query = {
-    'query': query
+    query
   };
   return JSON.stringify(_query);
 };
