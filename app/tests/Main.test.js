@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-const Main = require('../Main');
-const fs = require('fs');
+const Main = require("../Main");
+const fs = require("fs");
 
-test('Should run the entire process', () => {
-  expect(Main.morph()).toBe('Works');
+test("Should run the entire process", () => {
+  expect(Main.morph()).toBe("Works");
 });
 
-test('Should create a lock file', () => {
+test("Should create a lock file", () => {
   let lock_file = Main.getLockFilePath();
   let fp = Main.ensureLockFileExists(lock_file);
 
@@ -17,13 +17,13 @@ test('Should create a lock file', () => {
   expect(fs.existsSync(lock_file)).toBeFalsy();
 });
 
-test('Should throw an error when a lock file already exists', () => {
+test("Should throw an error when a lock file already exists", () => {
   let lock_file = Main.getLockFilePath();
   let fp = Main.ensureLockFileExists(lock_file);
 
   expect(() => {
     Main.ensureLockFileExists(lock_file);
-  }).toThrow('Unable to lock Emoji-ply');
+  }).toThrow("Unable to lock Emoji-ply");
 
   Main.unLockFile(fp);
   expect(fs.existsSync(lock_file)).toBeFalsy();

@@ -1,5 +1,5 @@
-'use strict';
-const SlackApiResponseBuilder = require('../SlackApiResponseBuilder');
+"use strict";
+const SlackApiResponseBuilder = require("../SlackApiResponseBuilder");
 
 class SlackMessageBuilder {
   constructor() {
@@ -59,11 +59,11 @@ class SlackMessageBuilder {
       text: text
     };
 
-    return this._build()
+    return this._build();
   }
 
   buildCustomMessage() {
-    return this._build()
+    return this._build();
   }
 
   _build() {

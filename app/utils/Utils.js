@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 class Utils {
 
@@ -22,15 +22,15 @@ class Utils {
     let m;
     if ((m = regex.exec(url)) !== null) {
       return {
-        'owner': m[1],
-        'repo': m[2],
-        'number': m[3],
+        "owner": m[1],
+        "repo": m[2],
+        "number": m[3],
       };
     }
     return {
-      'owner': null,
-      'repo': null,
-      'number': null,
+      "owner": null,
+      "repo": null,
+      "number": null,
     };
   }
 }

@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const axios = require('axios');
-const Configuration = require('../../Configuration');
-const SLACK_CONSTANTS = require('./SlackConstants');
+const axios = require("axios");
+const Configuration = require("../../Configuration");
+const SLACK_CONSTANTS = require("./SlackConstants");
 
 class SlackService {
 
@@ -17,16 +17,16 @@ class SlackService {
   /**
    * @see https://api.slack.com/methods/chat.postMessage
    * @param channel {string}
-   * @param message {string}
+   * @param text {string}
    * @returns {Promise<*>}
    */
-  async sendMessage(channel, message) {
+  async sendMessage(channel, text) {
     let headers = this.getRequestHeaders(true);
     let options = {
-      channel: channel,
-      text: message
+      channel,
+      text
     };
-    let request_options = this.buildRequestOptions('chat.postMessage', headers, "POST", options);
+    let request_options = this.buildRequestOptions("chat.postMessage", headers, "POST", options);
 
     return await this.processRequest(request_options);
   }
@@ -34,36 +34,37 @@ class SlackService {
   /**
    * @see https://api.slack.com/methods/chat.postMessage
    * @param channel {string}
-   * @param message {string}
+   * @param text {string}
    * @param thread_ts {string}
    * @param reply_to_channel {boolean}
    * @returns {Promise<*>}
    */
-  async sendMessageAsReplyTo(channel, message, thread_ts, reply_to_channel = false) {
+  async sendMessageAsReplyTo(channel, text, thread_ts, reply_to_channel = false) {
     let headers = this.getRequestHeaders(true);
     let options = {
-      channel: channel,
-      text: message,
-      thread_ts: thread_ts,
-      reply_to_channel: reply_to_channel
+      channel,
+      text,
+      thread_ts,
+      reply_to_channel
     };
-    let request_options = this.buildRequestOptions('chat.postMessage', headers, 'POST', options);
+    let request_options = this.buildRequestOptions("chat.postMessage", headers, "POST", options);
 
     return await this.processRequest(request_options);
   }
 
   /**
    * @see https://api.slack.com/methods/chat.postMessage
-   * @param message {string}
+   * @param text {string}
    * @returns {Promise<*>}
    */
-  async sendMessageToLogChannel(message) {
+  async sendMessageToLogChannel(text) {
     let headers = this.getRequestHeaders(true);
+    let channel = SLACK_CONSTANTS.CHANNEL_LOGS;
     let options = {
-      channel: SLACK_CONSTANTS.CHANNEL_LOGS,
-      text: message
+      channel,
+      text
     };
-    let request_options = this.buildRequestOptions('chat.postMessage', headers, 'POST', options);
+    let request_options = this.buildRequestOptions("chat.postMessage", headers, "POST", options);
 
     return await this.processRequest(request_options);
   }
@@ -76,10 +77,10 @@ class SlackService {
    * @returns {Promise<*>}
    */
   async getChannelHistory(channel = SLACK_CONSTANTS.CHANNEL_DEPLOY, qty = 50, public_channel = true) {
-    const api_namespace = public_channel ? 'channels' : 'groups';
+    const api_namespace = public_channel ? "channels" : "groups";
     const uri_params = `${api_namespace}history?channel=${channel}&count=${qty}`;
     let headers = this.getRequestHeaders(false);
-    let request_options = this.buildRequestOptions(uri_params, headers, 'GET', null);
+    let request_options = this.buildRequestOptions(uri_params, headers, "GET", null);
 
     return await this.processRequest(request_options);
   }
@@ -87,18 +88,18 @@ class SlackService {
   /**
    * @see https://api.slack.com/methods/chat.update
    * @param channel {string}
-   * @param message {string}
+   * @param text {string}
    * @param thread_ts {string}
    * @returns {Promise<void>}
    */
-  async updateMessage(channel, message, thread_ts) {
+  async updateMessage(channel, text, thread_ts) {
     let headers = this.getRequestHeaders(true);
     let options = {
-      channel: channel,
-      text: message,
-      thread_ts: thread_ts
+      channel,
+      text,
+      thread_ts
     };
-    let request_options = this.buildRequestOptions('chat.update', headers, 'POST', options);
+    let request_options = this.buildRequestOptions("chat.update", headers, "POST", options);
 
     return await this.processRequest(request_options);
   }
@@ -106,18 +107,18 @@ class SlackService {
   /**
    * @see https://api.slack.com/methods/chat.postEphemeral
    * @param channel {string}
-   * @param message {string}
+   * @param text {string}
    * @param user {string}
    * @returns {Promise<void>}
    */
-  async sendEphemeralMessage(channel, message, user) {
+  async sendEphemeralMessage(channel, text, user) {
     let headers = this.getRequestHeaders(true);
     let options = {
-      channel: channel,
-      text: message,
-      user: user
+      channel,
+      text,
+      user
     };
-    let request_options = this.buildRequestOptions('chat.postEphemeral', headers, 'POST', options);
+    let request_options = this.buildRequestOptions("chat.postEphemeral", headers, "POST", options);
 
     return await this.processRequest(request_options);
   }
@@ -126,20 +127,21 @@ class SlackService {
    * @see https://api.slack.com/methods/chat.postMessage
    * @param thread_ts {string}
    * @param channel {string}
-   * @param message {string}
-   * @param attachment {Object}
+   * @param text {string}
+   * @param attachments {Object}
    * @returns {Promise<*>}
    */
-  async sendAttachmentToMessage(thread_ts, channel, message, attachment) {
+  async sendAttachmentToMessage(thread_ts, channel, text, attachments) {
     let headers = this.getRequestHeaders(true);
+    let reply_broadcast = false;
     let options = {
-      thread_ts: thread_ts,
-      channel: channel,
-      text: message,
-      reply_broadcast: false,
-      attachments: attachment
+      thread_ts,
+      channel,
+      text,
+      attachments,
+      reply_broadcast
     };
-    let request_options = this.buildRequestOptions('chat.postMessage', headers, 'POST', options);
+    let request_options = this.buildRequestOptions("chat.postMessage", headers, "POST", options);
 
     return await this.processRequest(request_options);
   }
@@ -154,11 +156,11 @@ class SlackService {
   async reactToMessage(channel, thread_ts, reaction) {
     let headers = this.getRequestHeaders(true);
     let options = {
-      channel: channel,
-      timestamp: thread_ts,
+      channel,
+      thread_ts,
       name: reaction
     };
-    let request_options = this.buildRequestOptions('reactions.add', headers, 'POST', options);
+    let request_options = this.buildRequestOptions("reactions.add", headers, "POST", options);
     return await this.processRequest(request_options);
   }
 
@@ -172,11 +174,11 @@ class SlackService {
   async removeReactionToMessage(channel, thread_ts, reaction) {
     let headers = this.getRequestHeaders(true);
     let options = {
-      channel: channel,
-      timestamp: thread_ts,
+      channel,
+      thread_ts,
       name: reaction
     };
-    let request_options = this.buildRequestOptions('reactions.remove', headers, 'POST', options);
+    let request_options = this.buildRequestOptions("reactions.remove", headers, "POST", options);
     return await this.processRequest(request_options);
   }
 
@@ -220,8 +222,8 @@ class SlackService {
 
   getRequestHeaders(is_json = false) {
     return {
-      'Authorization': 'bearer ' + this._configuration.getVariable('SLACK_TOKEN'),
-      'Content-Type': (is_json ? 'application/json;charset=UTF-8' : 'application/x-www-form-urlencoded')
+      "Authorization": "bearer " + this._configuration.getVariable("SLACK_TOKEN"),
+      "Content-Type": (is_json ? "application/json;charset=UTF-8" : "application/x-www-form-urlencoded")
     };
   }
 

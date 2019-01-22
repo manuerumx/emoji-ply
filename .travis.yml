@@ -12,7 +12,6 @@ before_script:
   - cd app
   - npm install
 
-
 jobs:
   include:
     - node_js: 8
@@ -22,3 +21,4 @@ jobs:
       script:
         - npm run test
         - npm run coveralls
+        - npm run codacy

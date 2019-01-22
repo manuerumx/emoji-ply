@@ -1,5 +1,5 @@
-'use strict';
-const SlackApiResponseBuilder = require('../SlackApiResponseBuilder');
+"use strict";
+const SlackApiResponseBuilder = require("../SlackApiResponseBuilder");
 
 class SlackMessageResponseBuilder {
 
@@ -22,7 +22,7 @@ class SlackMessageResponseBuilder {
 
   _buildPad(ts) {
     let rand = Math.floor(Math.random() * 100000);
-    ts = ts + "." + rand.toString().padStart(6, '0');
+    ts = ts + "." + rand.toString().padStart(6, "0");
     return ts;
   }
 
@@ -75,7 +75,7 @@ class SlackMessageResponseBuilder {
   }
 
   _build() {
-    return SlackApiResponseBuilder.constructor(this._response)
+    return SlackApiResponseBuilder.constructor(this._response);
   }
 }
 
