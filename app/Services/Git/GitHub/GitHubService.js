@@ -18,7 +18,7 @@ class GitHubService {
   async getPullRequest(organization, repository, number) {
     let githubData = await this.getPullRequestInfo(organization, repository, number);
     if (githubData.hasOwnProperty("errors")) {
-      return GitHubPullRequestFactory.buildPullRequestFromGithub({}, undefined, undefined, undefined, undefined, undefined);
+      return GitHubPullRequestFactory.buildPullRequestFromGithub({}, "undefined", "undefined", "undefined", "undefined", "undefined");
     }
     let info = githubData.data.repository.pullRequest;
 
