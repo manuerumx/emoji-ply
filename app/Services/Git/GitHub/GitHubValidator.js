@@ -1,52 +1,52 @@
-'use strict';
+"use strict";
 
 const CONSTANT = require("./GitHubConstants");
-const Utils = require('../../../utils/Utils');
-const ARCHITECTS = ['manuerumx'];
-const SENSITIVE_FILES = ['package.json'];
-const SENSITIVE_PATHS = ['app/sensitive'];
-const SENSITIVE_LABELS = ['bug', 'needs rebase', 'error', 'needs help'];
+const Utils = require("../../../utils/Utils");
+const ARCHITECTS = ["manuerumx"];
+const SENSITIVE_FILES = ["package.json"];
+const SENSITIVE_PATHS = ["app/sensitive"];
+const SENSITIVE_LABELS = ["bug", "needs rebase", "error", "needs help"];
 
 
 class GitHubValidator {
 
   static _hasRequestedChanges(reviews) {
-    let requested_changes = [];
+    let requestedChanges = [];
 
     reviews.forEach((review) => {
-      let already_listed = requested_changes.includes(review.author);
+      let alreadyListed = requestedChanges.includes(review.author);
 
-      if (review.state === CONSTANT.APPROVED && already_listed) {
-        requested_changes.splice(requested_changes.indexOf((review.author)), 1);
+      if (review.state === CONSTANT.APPROVED && alreadyListed) {
+        requestedChanges.splice(requestedChanges.indexOf((review.author)), 1);
       }
 
-      if (review.state === CONSTANT.REQUESTED_CHANGES && !already_listed) {
-        requested_changes.push(review.author);
+      if (review.state === CONSTANT.REQUESTED_CHANGES && !alreadyListed) {
+        requestedChanges.push(review.author);
       }
     });
 
-    return requested_changes.length > 0;
+    return requestedChanges.length > 0;
   }
 
   static _hasReviewByArchitect(reviews) {
-    return reviews.reduce((is_architect, review) => {
-      return is_architect || GitHubValidator._isAnArchitect(review.author);
+    return reviews.reduce((isArchitect, review) => {
+      return isArchitect || GitHubValidator._isAnArchitect(review.author);
     }, false);
   }
 
-  static _hasReviewByArchitectAfterPush(reviews, commit_date) {
-    let has_review = reviews.filter((review) => {
-      return new Date(review.createdAt) >= new Date(commit_date) && review.state === CONSTANT.APPROVED && GitHubValidator._isAnArchitect(review.author);
+  static _hasReviewByArchitectAfterPush(reviews, commitDate) {
+    let hasReview = reviews.filter((review) => {
+      return new Date(review.createdAt) >= new Date(commitDate) && review.state === CONSTANT.APPROVED && GitHubValidator._isAnArchitect(review.author);
     });
-    return has_review.length >= 1;
+    return hasReview.length >= 1;
   }
 
-  static _hasPushedAfterReview(reviews, commit_date) {
-    let has_pushed = false;
+  static _hasPushedAfterReview(reviews, commitDate) {
+    let hasPushed = false;
     reviews.forEach((review) => {
-      has_pushed = new Date(commit_date) > new Date(review.createdAt);
+      hasPushed = new Date(commitDate) > new Date(review.createdAt);
     });
-    return has_pushed;
+    return hasPushed;
   }
 
   static _isAnArchitect(user) {
@@ -68,7 +68,7 @@ class GitHubValidator {
   }
 
   static _isFileInSensitivePath(file) {
-    return SENSITIVE_PATHS.some(fl => file.indexOf(fl) !== -1);
+    return SENSITIVE_PATHS.some((fl) => file.indexOf(fl) !== -1);
   }
 
   static _hasSensitiveLabels(labels) {

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 class GitHubGraphqlResponseBuilder {
 
@@ -13,66 +13,66 @@ class GitHubGraphqlResponseBuilder {
         this.organization = organization;
         this.repository = repository;
         this.number = number;
-        this.state = 'OPEN';
-        this.mergeable = 'MERGEABLE';
-        this.merged_status = false;
+        this.state = "OPEN";
+        this.mergeable = "MERGEABLE";
+        this.mergedStatus = false;
         this.locked = false;
-        this.additions = parseInt(Math.random() * 10);
-        this.deletions = parseInt(Math.random() * 10);
-        this.closed_status = false;
-        this.author = 'manuerumx';
-        this.files = ['Readme.md', '.gitignore'];
+        this.additions = parseInt(Math.random() * 10, 10);
+        this.deletions = parseInt(Math.random() * 10, 10);
+        this.closedStatus = false;
+        this.author = "manuerumx";
+        this.files = ["Readme.md", ".gitignore"];
         this.labels = [];
         this.reviews = [];
         this.commits = [];
       }
 
-      with_author(author) {
+      withAuthor(author) {
         this.author = author;
         return this;
       }
 
-      with_changed_files(files) {
+      withChangedFiles(files) {
         this.files = this.files.concat(files);
         return this;
       }
 
-      with_state(state = 'OPEN') {
+      withState(state = "OPEN") {
         this.state = state;
         return this;
       }
 
-      with_merged_status(merged = false) {
-        this.merged_status = merged;
+      withMergedStatus(merged = false) {
+        this.mergedStatus = merged;
         return this;
       }
 
-      with_mergeable_status(mergeable_status = 'MERGEABLE') {
-        this.mergeable = mergeable_status;
+      withMergeableStatus(mergeableStatus = "MERGEABLE") {
+        this.mergeable = mergeableStatus;
         return this;
       }
 
-      with_locked_status(locked_status = false) {
-        this.locked = locked_status;
+      withLockedStatus(lockedStatus = false) {
+        this.locked = lockedStatus;
         return this;
       }
 
-      with_additions(additions = 10) {
+      withAdditions(additions = 10) {
         this.additions = additions;
         return this;
       }
 
-      with_deletions(deletions = 10) {
+      withDeletions(deletions = 10) {
         this.deletions = deletions;
         return this;
       }
 
-      with_closed_status(closed_status = false) {
-        this.closed_status = closed_status;
+      withClosedStatus(closedStatus = false) {
+        this.closedStatus = closedStatus;
         return this;
       }
 
-      with_review(author, state, date) {
+      withReview(author, state, date) {
         let review = {
           "state": state,
           "createdAt": date,
@@ -84,16 +84,16 @@ class GitHubGraphqlResponseBuilder {
         return this;
       }
 
-      with_labels(labels) {
+      withLabels(labels) {
         this.labels = labels;
         return this;
       }
 
-      with_commit_date(commit_date) {
+      withCommitDate(commitDate) {
         let commit = {
           "id": "MDE3OlB1bGxSZXF1ZXN0Q29tbWl0MjQxMDE0MzI1OjE1NmUxYzVjYWY2NzExNjVmMjY0NDBlMzJlMGRjYzIwN2JlMDEzN2M=",
           "commit": {
-            "pushedDate": commit_date
+            "pushedDate": commitDate
           }
         };
         this.commits.unshift(commit);
@@ -123,10 +123,10 @@ class GitHubGraphqlResponseBuilder {
                 "revertUrl": `https://github.com/${this.organization}/${this.repository}/pull/${this.number}/revert`,
                 "state": this.state,
                 "title": this.title,
-                "merged": this.merged_status,
+                "merged": this.mergedStatus,
                 "mergeable": this.mergeable,
                 "locked": this.locked,
-                "closed": this.closed_status,
+                "closed": this.closedStatus,
                 "additions": this.additions,
                 "deletions": this.deletions,
                 "files": {

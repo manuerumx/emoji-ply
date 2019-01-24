@@ -2,15 +2,15 @@
 
 class GitHubParser {
 
-  static parseLabels(github_data) {
-    return github_data.reduce((accumulator, current) => {
+  static parseLabels(githubData) {
+    return githubData.reduce((accumulator, current) => {
       accumulator.push(current.name);
       return accumulator;
-    }, []).filter(lb => lb !== undefined);
+    }, []).filter((lb) => lb !== undefined);
   }
 
-  static parseReviews(github_data) {
-    return github_data.map((review) => {
+  static parseReviews(githubData) {
+    return githubData.map((review) => {
       return {
         "author": review.author.login,
         "state": review.state,
@@ -19,37 +19,37 @@ class GitHubParser {
     });
   }
 
-  static parseChecks(github_data) {
-    if (github_data.total_count === 0) {
+  static parseChecks(githubData) {
+    if (githubData.total_count === 0) {
       return {
         "status": "Undefined",
         "conclusion": "Undefined"
       };
     }
 
-    let last_run = github_data.check_runs[0];
+    let last_run = githubData.check_runs[0];
     return {
       "status": last_run.status,
       "conclusion": last_run.conclusion
     };
   }
 
-  static parseFiles(github_data) {
-    return github_data.reduce((accumulator, current) => {
+  static parseFiles(githubData) {
+    return githubData.reduce((accumulator, current) => {
       accumulator.push(current.path);
       return accumulator;
-    }, []).filter(fl => fl !== undefined);
+    }, []).filter((fl) => fl !== undefined);
   }
 
-  static extractInfoFromLastCommit(github_data) {
-    let hashed_commit = Buffer.from(github_data.commits.nodes[0].id, "Base64").toString();
-    let commit_array = hashed_commit.split(":");
-    let reversed_array = commit_array.reverse();
-    return reversed_array[0];
+  static extractInfoFromLastCommit(githubData) {
+    let hashedCommit = Buffer.from(githubData.commits.nodes[0].id, "Base64").toString();
+    let commitArray = hashedCommit.split(":");
+    let reversedArray = commitArray.reverse();
+    return reversedArray[0];
   }
 
-  static extractLastCommitDate(github_data) {
-    return github_data.commits.nodes[0].commit.pushedDate;
+  static extractLastCommitDate(githubData) {
+    return githubData.commits.nodes[0].commit.pushedDate;
   }
 }
 

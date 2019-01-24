@@ -23,21 +23,21 @@ class Main {
   }
 
   static tryToLock() {
-    const lock_file = Main.getLockFilePath();
-    return this.ensureLockFileExists(lock_file);
+    const lockFile = Main.getLockFilePath();
+    return this.ensureLockFileExists(lockFile);
   }
 
-  static ensureLockFileExists(lock_file) {
-    if (fs.existsSync(lock_file)) {
+  static ensureLockFileExists(lockFile) {
+    if (fs.existsSync(lockFile)) {
       throw "Unable to lock Emoji-ply";
     }
 
-    let lock_fp = fs.openSync(lock_file, "w");
-    if (!lock_fp) {
+    let lockFp = fs.openSync(lockFile, "w");
+    if (!lockFp) {
       throw "Unable to lock Emoji-ply";
     }
 
-    return lock_fp;
+    return lockFp;
   }
 
   static getLockFilePath() {

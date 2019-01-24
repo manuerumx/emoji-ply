@@ -2,19 +2,19 @@
 
 class Utils {
 
-  static extractValueOrDefault(el, ky, default_value = undefined) {
+  static extractValueOrDefault(el, ky, defaultValue = undefined) {
     if (el.hasOwnProperty(ky)) {
       return el[ky];
     }
-    return default_value;
+    return defaultValue;
   }
 
-  static cleanArrayDuplicates(array_duplicated) {
-    return array_duplicated.filter((elem, pos, arr) => arr.indexOf(elem) === pos);
+  static cleanArrayDuplicates(arrayDuplicated) {
+    return arrayDuplicated.filter((elem, pos, arr) => arr.indexOf(elem) === pos);
   }
 
-  static isSomeInOtherArray(array_one, array_two) {
-    return array_one.some(element => array_two.indexOf(element) >= 0);
+  static isSomeInOtherArray(arrayOne, arrayTwo) {
+    return arrayOne.some((element) => arrayTwo.indexOf(element) >= 0);
   }
 
   static extractInfoFromGitHubUrl(url) {
