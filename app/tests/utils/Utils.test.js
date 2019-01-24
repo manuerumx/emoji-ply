@@ -25,21 +25,21 @@ describe("Test Utils class", () => {
   });
 
   test("Test the detection of existance of one element into another array", () => {
-    const array_one = [1, 2, 3, 4, 5];
-    const array_two = [6, 7, 8, 9, 2];
-    const array_three = [6, 7, 8, 9, 0];
-    expect(Utils.isSomeInOtherArray(array_one, array_two)).toBeTruthy();
-    expect(Utils.isSomeInOtherArray(array_two, array_one)).toBeTruthy();
-    expect(Utils.isSomeInOtherArray(array_one, array_three)).toBeFalsy();
+    const arrayOne = [1, 2, 3, 4, 5];
+    const arrayTwo = [6, 7, 8, 9, 2];
+    const arrayThree = [6, 7, 8, 9, 0];
+    expect(Utils.isSomeInOtherArray(arrayOne, arrayTwo)).toBeTruthy();
+    expect(Utils.isSomeInOtherArray(arrayTwo, arrayOne)).toBeTruthy();
+    expect(Utils.isSomeInOtherArray(arrayOne, arrayThree)).toBeFalsy();
   });
 
   test("Test the regular expression to extract/parse info from Github URL", () => {
-    const invalid_response = {"owner": null, "repo": null, "number": null};
+    const invalidResponse = {"owner": null, "repo": null, "number": null};
     const urls = [
       ["https://github.com/octokit/rest.js/pull/998", {"owner": "octokit", "repo": "rest.js", "number": "998"}],
       ["https://github.com/octokit/rest.js/pull/998/files", {"owner": "octokit", "repo": "rest.js", "number": "998"}],
-      ["https://github.com/octokit/rest.js/998", invalid_response],
-      ["https://www.google.com", invalid_response],
+      ["https://github.com/octokit/rest.js/998", invalidResponse],
+      ["https://www.google.com", invalidResponse],
     ];
     urls.forEach((current) => {
       let response = Utils.extractInfoFromGitHubUrl(current[0]);

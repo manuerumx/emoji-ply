@@ -26,7 +26,7 @@ class Configuration extends EnvLoader {
   }
 
   loadEnvFromService(service) {
-    let variable_data = service.split('=');
+    let variable_data = service.split("=");
     if (variable_data.length === 2) {
       this.addProperty(variable_data[0], process.env[variable_data[0]] || variable_data[1]);
     }

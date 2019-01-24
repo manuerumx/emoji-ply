@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 class EnvLoader {
 
@@ -16,7 +16,7 @@ class EnvLoader {
     if (this.hasOwnProperty(name)) {
       return this[name];
     }
-    throw 'Unable to find the variable';
+    throw "Unable to find the variable";
   }
 }
 
