@@ -18,17 +18,17 @@ class Configuration extends EnvLoader {
   }
 
   processServicesVariables() {
-    this.services.forEach(service => this.loadAndProcessService(service));
+    this.services.forEach((service) => this.loadAndProcessService(service));
   }
 
   loadAndProcessService(service) {
-    service.forEach(element => this.loadEnvFromService(element));
+    service.forEach((element) => this.loadEnvFromService(element));
   }
 
   loadEnvFromService(service) {
-    let variable_data = service.split("=");
-    if (variable_data.length === 2) {
-      this.addProperty(variable_data[0], process.env[variable_data[0]] || variable_data[1]);
+    let variableData = service.split("=");
+    if (variableData.length === 2) {
+      this.addProperty(variableData[0], process.env[variableData[0]] || variableData[1]);
     }
   }
 }

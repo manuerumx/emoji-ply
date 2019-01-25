@@ -23,7 +23,19 @@ function mockAxiosRejection() {
   axios.mockImplementationOnce(() => Promise.reject({error: true}));
 }
 
+const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
+let githubService = new GitHubService(config);
+let baseDate, commitDate, reviewDate, review2Date, checkDate;
+
 jest.mock("axios");
+
+beforeEach(() => {
+  baseDate = new Date();
+  commitDate = new Date(baseDate).toISOString();
+  reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
+  review2Date = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
+  checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
+});
 
 test("Should return the pull request cannot be found", async () => {
   let resp = {
@@ -31,23 +43,14 @@ test("Should return the pull request cannot be found", async () => {
     "errors": []
   };
   axios.mockResolvedValueOnce(resp);
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
+
   let response = await githubService.getPullRequest("manuerumx", "emoji-ply", 100);
   expect(response.reason).toBe("The requested pull cannot be found");
   expect(response.isFoundOnRemote).toBeFalsy();
 });
 
 test("Should get a PullRequest ready to be merged", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const review2Date = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
@@ -57,7 +60,7 @@ test("Should get a PullRequest ready to be merged", async () => {
     .withAuthor("manuerumx")
     .withState("OPEN")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -73,9 +76,7 @@ test("Should get a PullRequest ready to be merged", async () => {
 });
 
 test("Should get a PullRequest and hasReviewByArchitectAfterPush should be true", async () => {
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("HasReviewByArchitect", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("HasReviewByArchitect", "manuerumx", "emoji-ply", 100)
     .withAuthor("emoji-ply")
     .withCommitDate("2019-01-08T17:00:00.067Z")
     .withLabels(["Good"])
@@ -86,7 +87,7 @@ test("Should get a PullRequest and hasReviewByArchitectAfterPush should be true"
     .withState("OPEN")
     .build();
 
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", "2019-01-08T17:20:00.067Z").build();
 
   axios
@@ -102,15 +103,9 @@ test("Should get a PullRequest and hasReviewByArchitectAfterPush should be true"
 });
 
 test("Should get a PullRequest ready to be merged but too old", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate.setTime(baseDate.getTime() - 600000000)).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
-    .withCommitDate(commitDate)
+  const commitOldDate = new Date(baseDate.setTime(baseDate.getDate() - 10)).toISOString();
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+    .withCommitDate(commitOldDate)
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
     .withReview("Bob", "APPROVED", reviewDate)
@@ -118,7 +113,7 @@ test("Should get a PullRequest ready to be merged but too old", async () => {
     .withAuthor("manuerumx")
     .withState("OPEN")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -134,15 +129,7 @@ test("Should get a PullRequest ready to be merged but too old", async () => {
 });
 
 test("Should get a PullRequest with sensitive changes", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const review2Date = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
@@ -152,7 +139,7 @@ test("Should get a PullRequest with sensitive changes", async () => {
     .withAuthor("manuerumx")
     .withState("OPEN")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -168,16 +155,7 @@ test("Should get a PullRequest with sensitive changes", async () => {
 });
 
 test("Should get a PullRequest with base branch other than master", async () => {
-
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const review2Date = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
@@ -187,7 +165,7 @@ test("Should get a PullRequest with base branch other than master", async () => 
     .withAuthor("manuerumx")
     .withState("OPEN")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   resp.data.repository.pullRequest.baseRefName = "random";
   axios
@@ -204,15 +182,7 @@ test("Should get a PullRequest with base branch other than master", async () => 
 });
 
 test("Should get a PullRequest with CI failures", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const review2Date = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
@@ -222,7 +192,7 @@ test("Should get a PullRequest with CI failures", async () => {
     .withAuthor("manuerumx")
     .withState("OPEN")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "error", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -238,15 +208,7 @@ test("Should get a PullRequest with CI failures", async () => {
 });
 
 test("Should get a PullRequest closed", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const review2Date = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
@@ -255,7 +217,7 @@ test("Should get a PullRequest closed", async () => {
     .withAuthor("manuerumx")
     .withClosedStatus(true)
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -271,15 +233,7 @@ test("Should get a PullRequest closed", async () => {
 });
 
 test("Should get a PullRequest with conflicts", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const review2Date = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
@@ -288,7 +242,7 @@ test("Should get a PullRequest with conflicts", async () => {
     .withAuthor("manuerumx")
     .withMergeableStatus("CONFLICTING")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -304,20 +258,13 @@ test("Should get a PullRequest with conflicts", async () => {
 });
 
 test("Should get a PullRequest with no reviews", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const review2Date = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
   const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withLabels(["Good"])
     .withAuthor("manuerumx")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -333,14 +280,7 @@ test("Should get a PullRequest with no reviews", async () => {
 });
 
 test("Should get a PullRequest with requested changes", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
@@ -349,7 +289,7 @@ test("Should get a PullRequest with requested changes", async () => {
     .withAuthor("manuerumx")
     .withState("OPEN")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -365,14 +305,7 @@ test("Should get a PullRequest with requested changes", async () => {
 });
 
 test("Should get a PullRequest with push after review", async () => {
-  const baseDate = new Date();
-  const commitDate = new Date(baseDate).toISOString();
-  const reviewDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-  const checkDate = new Date(baseDate.setTime(baseDate.getTime() + 60000)).toISOString();
-
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(commitDate)
     .withReview("Bob", "APPROVED", commitDate)
     .withLabels(["Good"])
@@ -383,7 +316,7 @@ test("Should get a PullRequest with push after review", async () => {
     .withAuthor("manuerumx")
     .withState("OPEN")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("finished", "success", checkDate).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -399,9 +332,7 @@ test("Should get a PullRequest with push after review", async () => {
 });
 
 test("Should get a PullRequest entity already merged", async () => {
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(new Date().toISOString())
     .withLabels(["Good"])
     .withAuthor("emoji-ply")
@@ -411,7 +342,7 @@ test("Should get a PullRequest entity already merged", async () => {
     .withMergedStatus(true)
     .withState("CLOSED")
     .build();
-  const resp2 = new GitHubChecksResponseBuilder.builder()
+  const resp2 = new GitHubChecksResponseBuilder.Builder()
     .with_check("success", "ok", new Date().toISOString()).build();
   axios
     .mockResolvedValueOnce(resp)
@@ -427,9 +358,7 @@ test("Should get a PullRequest entity already merged", async () => {
 });
 
 test("Should getPullRequestInfo return mocked data", async () => {
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
-  const resp = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+  const resp = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
     .withCommitDate(new Date().toISOString())
     .withLabels(["needs_rebase", "bug"])
     .withAuthor("emoji-ply")
@@ -443,20 +372,14 @@ test("Should getPullRequestInfo return mocked data", async () => {
 
 test("Should getPullRequestInfo return a mocked error", async () => {
   mockAxiosRejection();
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
   let response = await githubService.getPullRequestInfo();
 
   expect(response).toBeNull();
 });
 
 test("Should getChecksForCommit return mocked data", async () => {
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
   let resp = {"data": [{"name": "bob"}]};
-
   axios.mockResolvedValueOnce(resp);
-
   let response = await githubService.getChecksForCommit("manuerumx", "emoji-ply", "random_sha");
 
   expect(response.data).toEqual(resp.data);
@@ -464,20 +387,14 @@ test("Should getChecksForCommit return mocked data", async () => {
 
 test("Should getChecksForCommit return a mocked error", async () => {
   mockAxiosRejection();
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
   let response = await githubService.getChecksForCommit("manuerumx", "emoji-ply", "random_sha");
 
   expect(response).toBeNull();
 });
 
 test("Should mergePullRequest return mocked data", async () => {
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
   let resp = {"data": [{"name": "bob"}]};
-
   axios.mockResolvedValue(resp);
-
   let response = await githubService.getChecksForCommit("manuerumx", "emoji-ply", "random_sha");
 
   expect(response.data).toEqual(resp.data);
@@ -485,24 +402,18 @@ test("Should mergePullRequest return mocked data", async () => {
 
 test("Should mergePullRequest return a mocked error", async () => {
   mockAxiosRejection();
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
   let response = await githubService.mergePullRequest("manuerumx", "emoji-ply", 100, "Merged by test");
 
   expect(response).toBeNull();
 });
 
 test("Should getHeaders include token", () => {
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
   let headers = githubService.getHeaders();
 
   expect(headers).toEqual(expectedHeaders);
 });
 
 test("Should buildRequestOptions returns data", () => {
-  const config = new Configuration(["GITHUB_TOKEN=CUSTOM_TOKEN_FOR_GITHUB_API"]);
-  let githubService = new GitHubService(config);
   let requestOptions = githubService.buildRequestOptions(
     githubService.getHeaders(),
     GitHubService.getGraphqlUri(),

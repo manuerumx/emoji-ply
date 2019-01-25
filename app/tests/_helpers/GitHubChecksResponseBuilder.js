@@ -5,7 +5,7 @@ class GitHubChecksResponseBuilder {
     return response;
   }
 
-  static get builder() {
+  static get Builder() {
 
     class Builder {
       constructor() {
