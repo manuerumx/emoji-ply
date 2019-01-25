@@ -2,7 +2,7 @@
 
 class Utils {
 
-  static extractValueOrDefault(el, ky, defaultValue = undefined) {
+  static extractValueOrDefault(el, ky, defaultValue = "undefined") {
     if (el.hasOwnProperty(ky)) {
       return el[ky];
     }

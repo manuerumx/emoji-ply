@@ -6,7 +6,7 @@ class GitHubParser {
     return githubData.reduce((accumulator, current) => {
       accumulator.push(current.name);
       return accumulator;
-    }, []).filter((lb) => lb !== undefined);
+    }, []).filter((lb) => typeof lb !== "undefined");
   }
 
   static parseReviews(githubData) {
@@ -38,7 +38,7 @@ class GitHubParser {
     return githubData.reduce((accumulator, current) => {
       accumulator.push(current.path);
       return accumulator;
-    }, []).filter((fl) => fl !== undefined);
+    }, []).filter((fl) => typeof fl !== "undefined");
   }
 
   static extractInfoFromLastCommit(githubData) {

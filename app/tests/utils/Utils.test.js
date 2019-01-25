@@ -21,7 +21,7 @@ describe("Test Utils class", () => {
     expect(Utils.extractValueOrDefault(myObject, "owner", "Ups")).toBe("random");
     expect(Utils.extractValueOrDefault(myObject, "Number", 0)).toBe(0);
     expect(Utils.extractValueOrDefault(myObject, "repository", "error")).toBe("error");
-    expect(Utils.extractValueOrDefault(myObject, "ownerx")).toBeUndefined();
+    expect(Utils.extractValueOrDefault(myObject, "ownerx")).toBe("undefined");
   });
 
   test("Test the detection of existance of one element into another array", () => {
