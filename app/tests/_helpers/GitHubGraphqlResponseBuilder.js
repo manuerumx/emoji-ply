@@ -6,7 +6,7 @@ class GitHubGraphqlResponseBuilder {
     return response;
   }
 
-  static get builder() {
+  static get Builder() {
     class Builder {
       constructor(title, organization, repository, number) {
         this.title = title;
@@ -72,12 +72,12 @@ class GitHubGraphqlResponseBuilder {
         return this;
       }
 
-      withReview(author, state, date) {
+      withReview(reviewAuthor, reviewState, reviewDate) {
         let review = {
-          "state": state,
-          "createdAt": date,
+          "state": reviewState,
+          "createdAt": reviewDate,
           "author": {
-            "login": author
+            "login": reviewAuthor
           }
         };
         this.reviews.push(review);
@@ -130,7 +130,7 @@ class GitHubGraphqlResponseBuilder {
                 "additions": this.additions,
                 "deletions": this.deletions,
                 "files": {
-                  "nodes": this.files.map(fl => {
+                  "nodes": this.files.map((fl) => {
                     return {"path": fl};
                   })
                 },
@@ -138,7 +138,7 @@ class GitHubGraphqlResponseBuilder {
                   "nodes": this.reviews
                 },
                 "labels": {
-                  "nodes": this.labels.map(fl => {
+                  "nodes": this.labels.map((fl) => {
                     return {"name": fl};
                   })
                 },

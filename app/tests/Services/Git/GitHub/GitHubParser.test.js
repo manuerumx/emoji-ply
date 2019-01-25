@@ -7,7 +7,7 @@ const GitHubChecksResponseBuilder = require("../../../_helpers/GitHubChecksRespo
 const commitDate = new Date().toISOString();
 const reviewDate = new Date().toISOString();
 
-const githubData = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manuerumx", "emoji-ply", 100)
+const githubData = new GitHubGraphqlResponseBuilder.Builder("Mocked Test", "manuerumx", "emoji-ply", 100)
   .withCommitDate(commitDate)
   .withLabels(["needs_rebase", "bug"])
   .withAuthor("emoji-ply")
@@ -15,7 +15,7 @@ const githubData = new GitHubGraphqlResponseBuilder.builder("Mocked Test", "manu
   .build();
 
 test("Should return null because no checks reported", () => {
-  const checksEmptyResponse = new GitHubChecksResponseBuilder.builder()
+  const checksEmptyResponse = new GitHubChecksResponseBuilder.Builder()
     .build();
   const expected = {"conclusion": "Undefined", "status": "Undefined"};
   let result = GitHubParser.parseChecks(checksEmptyResponse);
@@ -24,7 +24,7 @@ test("Should return null because no checks reported", () => {
 });
 
 test("Should extract the checks status", () => {
-  const checksResponse = new GitHubChecksResponseBuilder.builder()
+  const checksResponse = new GitHubChecksResponseBuilder.Builder()
     .with_check("completed", "neutral", commitDate)
     .build();
 

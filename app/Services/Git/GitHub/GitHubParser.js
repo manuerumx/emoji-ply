@@ -27,10 +27,10 @@ class GitHubParser {
       };
     }
 
-    let last_run = githubData.check_runs[0];
+    let lastRun = githubData.check_runs[0];
     return {
-      "status": last_run.status,
-      "conclusion": last_run.conclusion
+      "status": lastRun.status,
+      "conclusion": lastRun.conclusion
     };
   }
 
