@@ -11,10 +11,12 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "jest",
+    "test": "snyk test && jest",
     "coverage": "jest --coverage",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
-    "codacy": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage"
+    "codacy": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -40,6 +42,8 @@
     "jest": "^23.6.0"
   },
   "dependencies": {
-    "axios": "^0.18.0"
-  }
+    "axios": "^0.18.0",
+    "snyk": "^1.161.1"
+  },
+  "snyk": true
 }
