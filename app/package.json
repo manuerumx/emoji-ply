@@ -11,7 +11,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "snyk test && jest",
+    "test": "jest",
+    "test-security": "snyk test && jest",
     "coverage": "jest --coverage",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "codacy": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage",
