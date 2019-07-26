@@ -11,7 +11,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "test": "snyk test && jest",
+    "test": "jest",
+    "test-security": "snyk test && jest",
     "coverage": "jest --coverage",
     "coveralls": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "codacy": "jest --coverage && cat ./coverage/lcov.info | codacy-coverage",
@@ -38,12 +39,12 @@
   "homepage": "https://github.com/manuerumx/emoji-ply#readme",
   "devDependencies": {
     "codacy-coverage": "^3.4.0",
-    "coveralls": "^3.0.2",
+    "coveralls": "^3.0.5",
     "jest": "^23.6.0"
   },
   "dependencies": {
-    "axios": "^0.18.0",
-    "snyk": "^1.161.1"
+    "axios": "^0.18.1",
+    "snyk": "^1.199.2"
   },
   "snyk": true
 }
