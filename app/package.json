@@ -39,7 +39,7 @@
   "homepage": "https://github.com/manuerumx/emoji-ply#readme",
   "devDependencies": {
     "codacy-coverage": "^3.4.0",
-    "coveralls": "^3.0.5",
+    "coveralls": "^3.0.6",
     "jest": "^24.8.0"
   },
   "dependencies": {
