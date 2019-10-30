@@ -13,18 +13,33 @@ class Configuration extends EnvLoader {
     this.processServicesVariables();
   }
 
+  /**
+   *
+   * @returns {*}
+   */
   getEnvironment() {
     return this.getVariable("environment");
   }
 
+  /**
+   *
+   */
   processServicesVariables() {
     this.services.forEach((service) => this.loadAndProcessService(service));
   }
 
+  /**
+   *
+   * @param service
+   */
   loadAndProcessService(service) {
     service.forEach((element) => this.loadEnvFromService(element));
   }
 
+  /**
+   *
+   * @param service
+   */
   loadEnvFromService(service) {
     let variableData = service.split("=");
     if (variableData.length === 2) {

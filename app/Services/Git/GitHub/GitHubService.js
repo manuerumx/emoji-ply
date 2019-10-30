@@ -15,6 +15,13 @@ class GitHubService {
     this._configuration = configuration;
   }
 
+  /**
+   *
+   * @param organization
+   * @param repository
+   * @param number
+   * @returns {Promise<PullRequest>}
+   */
   async getPullRequest(organization, repository, number) {
     let githubData = await this.getPullRequestInfo(organization, repository, number);
     if (githubData.hasOwnProperty("errors")) {
@@ -34,6 +41,13 @@ class GitHubService {
     return GitHubPullRequestFactory.buildPullRequestFromGithub(info, files, reviews, checks, labels, commitPushedAt);
   }
 
+  /**
+   *
+   * @param organization
+   * @param repository
+   * @param number
+   * @returns {Promise<null>}
+   */
   async getPullRequestInfo(organization, repository, number) {
     let response = null;
     try {
@@ -50,6 +64,13 @@ class GitHubService {
     return response;
   }
 
+  /**
+   *
+   * @param organization
+   * @param repository
+   * @param shaCommit
+   * @returns {Promise<null>}
+   */
   async getChecksForCommit(organization, repository, shaCommit) {
     let response = null;
     try {
@@ -65,6 +86,14 @@ class GitHubService {
     return response;
   }
 
+  /**
+   *
+   * @param organization
+   * @param repository
+   * @param number
+   * @param message
+   * @returns {Promise<null>}
+   */
   async mergePullRequest(organization, repository, number, message) {
     let response = null;
     try {
@@ -82,10 +111,18 @@ class GitHubService {
     return response;
   }
 
+  /**
+   *
+   * @returns {string}
+   */
   static getGraphqlUri() {
     return "https://api.github.com/graphql";
   }
 
+  /**
+   *
+   * @returns {{Authorization: string, Accept: string, "Content-Type": string}}
+   */
   getHeaders() {
     return {
       "Authorization": "bearer " + this._configuration.getVariable("GITHUB_TOKEN"),

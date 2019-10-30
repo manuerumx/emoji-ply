@@ -180,6 +180,12 @@ class SlackService {
     return await this.processRequest(requestOptions);
   }
 
+  /**
+   * Function to limit and throttle the amount of requests to Slack API.
+   *
+   * @returns {Promise<void>}
+   * @private
+   */
   async _throttleRequests() {
     let timeSinceLastRequest = (new Date().getTime() / 1000) - this._lastRequest;
     let minimumTimeInMicros = SLACK_CONSTANTS.REQUEST_RATE_LIMIT / 1000;
@@ -188,10 +194,20 @@ class SlackService {
     }
   }
 
+  /**
+   * Stores the time when the last request was executed.
+   * @private
+   */
   _storeLastRequest() {
     this._lastRequest = (new Date().getTime() / 1000);
   }
 
+  /**
+   * Process the request.
+   *
+   * @param requestOptions
+   * @returns {Promise<*>}
+   */
   async processRequest(requestOptions) {
     let response = null;
     this._throttleRequests();
@@ -205,10 +221,25 @@ class SlackService {
     return response;
   }
 
+  /**
+   * Returns a promise which is resolved after N ms.
+   *
+   * @param ms {number} Amount of ms.
+   * @returns {Promise<setTimeout>}
+   * @private
+   */
   _sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
+  /**
+   *
+   * @param uri
+   * @param headers
+   * @param method
+   * @param rawData
+   * @returns {{headers: *, method: *, data: *, url: string}}
+   */
   buildRequestOptions(uri, headers, method, rawData) {
     return {
       "method": method,
@@ -218,6 +249,12 @@ class SlackService {
     };
   }
 
+  /**
+   * Return the headers object based on the request content type.
+   *
+   * @param isJson {boolean}
+   * @returns {{Authorization: string, "Content-Type": (string)}}
+   */
   getRequestHeaders(isJson = false) {
     return {
       "Authorization": "bearer " + this._configuration.getVariable("SLACK_TOKEN"),

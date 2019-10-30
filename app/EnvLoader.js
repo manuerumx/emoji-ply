@@ -1,7 +1,11 @@
 "use strict";
 
 class EnvLoader {
-
+  /**
+   *
+   * @param name
+   * @param val
+   */
   addProperty(name, val) {
     const definition = {
       enumerable: true,
@@ -12,6 +16,11 @@ class EnvLoader {
     Object.defineProperty(this, name, definition);
   }
 
+  /**
+   *
+   * @param name
+   * @returns {*}
+   */
   getVariable(name) {
     if (this.hasOwnProperty(name)) {
       return this[name];

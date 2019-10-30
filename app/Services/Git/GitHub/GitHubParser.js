@@ -1,7 +1,11 @@
 "use strict";
 
 class GitHubParser {
-
+  /**
+   *
+   * @param githubData
+   * @returns {*}
+   */
   static parseLabels(githubData) {
     return githubData.reduce((accumulator, current) => {
       accumulator.push(current.name);
@@ -9,6 +13,11 @@ class GitHubParser {
     }, []).filter((lb) => typeof lb !== "undefined");
   }
 
+  /**
+   *
+   * @param githubData
+   * @returns {Uint8Array|BigInt64Array|{createdAt: *, author: *, state: *}[]|Float64Array|Int8Array|Float32Array|Int32Array|Uint32Array|Uint8ClampedArray|BigUint64Array|Int16Array|Uint16Array}
+   */
   static parseReviews(githubData) {
     return githubData.map((review) => {
       return {
@@ -19,6 +28,11 @@ class GitHubParser {
     });
   }
 
+  /**
+   *
+   * @param githubData
+   * @returns {{conclusion: *, status: *}|{conclusion: string, status: string}}
+   */
   static parseChecks(githubData) {
     if (githubData.total_count === 0) {
       return {
@@ -34,6 +48,11 @@ class GitHubParser {
     };
   }
 
+  /**
+   *
+   * @param githubData
+   * @returns {*}
+   */
   static parseFiles(githubData) {
     return githubData.reduce((accumulator, current) => {
       accumulator.push(current.path);
@@ -41,6 +60,11 @@ class GitHubParser {
     }, []).filter((fl) => typeof fl !== "undefined");
   }
 
+  /**
+   *
+   * @param githubData
+   * @returns {string}
+   */
   static extractInfoFromLastCommit(githubData) {
     let hashedCommit = Buffer.from(githubData.commits.nodes[0].id, "Base64").toString();
     let commitArray = hashedCommit.split(":");
@@ -48,6 +72,10 @@ class GitHubParser {
     return reversedArray[0];
   }
 
+  /**
+   *
+   * @param githubData
+   */
   static extractLastCommitDate(githubData) {
     return githubData.commits.nodes[0].commit.pushedDate;
   }

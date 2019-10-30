@@ -6,7 +6,16 @@ const GitHubValidator = require("./GitHubValidator");
 const CONSTANT = require("./GitHubConstants");
 
 class GitHubPullRequestFactory {
-
+  /**
+   *
+   * @param info
+   * @param files
+   * @param reviews
+   * @param checks
+   * @param labels
+   * @param commitPushedAt
+   * @returns {PullRequest}
+   */
   static buildPullRequestFromGithub(info, files, reviews, checks, labels, commitPushedAt) {
     let instance = new PullRequest();
 
