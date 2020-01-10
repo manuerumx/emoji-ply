@@ -20,5 +20,8 @@ jobs:
     - node_js: 10
       script:
         - npm run test
+    - node_js: 13
+      script:
+        - npm run test
         - npm run coveralls
         - npm run codacy
