@@ -43,7 +43,7 @@
     "jest": "^25.1.0"
   },
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "^0.19.2",
     "snyk": "^1.278.2"
   },
   "snyk": true
