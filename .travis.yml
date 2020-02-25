@@ -3,6 +3,13 @@ cache:
   directories:
     - ~/.npm
     - node_modules/
+    - '$HOME/.sonar/cache'
+
+addons:
+  sonarcloud:
+    organization: "sonarcloud"
+    token:
+      secure: "5b675c1a606beeec9b2189c0478805e2f2490703"
 
 branches:
   only:
@@ -25,3 +32,9 @@ jobs:
         - npm run test
         - npm run coveralls
         - npm run codacy
+        - sonar-scanner
+
+
+
+
+  5b675c1a606beeec9b2189c0478805e2f2490703
