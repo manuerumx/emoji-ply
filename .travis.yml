@@ -33,8 +33,3 @@ jobs:
         - npm run coveralls
         - npm run codacy
         - sonar-scanner
-
-
-
-
-  5b675c1a606beeec9b2189c0478805e2f2490703
