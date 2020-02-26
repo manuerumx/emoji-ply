@@ -3,8 +3,8 @@ language: node_js
 cache:
   directories:
   - "~/.npm"
-  - node_modules/
   - "$HOME/.sonar/cache"
+  - node_modules/
 addons:
   sonarcloud:
     organization: manuerumx
