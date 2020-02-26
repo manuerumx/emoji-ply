@@ -1,35 +1,32 @@
+dist: trusty
 language: node_js
 cache:
   directories:
-    - ~/.npm
-    - node_modules/
-    - '$HOME/.sonar/cache'
-
+  - "~/.npm"
+  - node_modules/
+  - "$HOME/.sonar/cache"
 addons:
   sonarcloud:
-    organization: "sonarcloud"
+    organization: manuerumx
     token:
-      secure: "5b675c1a606beeec9b2189c0478805e2f2490703"
-
+      secure: "Bw20D5oz5NtIZljI4vdD5BMNgCY23K1aUFRJfx/B7WZxyKWY9UZPnuuFYJJRKKuEj/7GAvNkZKmm+lF9/Bk8ZVyJbdm27cHJh6dFfAhO/5W/SlR6AfzzlV4PDxGaXbaMnrFAuBBah1fvtcFZJeHyBDR5miU+qUJraYIolqWVrzQAt7ODirBG/qYrUy0WJFC+pOCf9tNnTD73Hx9wcaJxAr7tlPGETp/wWxtMlrnKVEpejFk3dlF7SXfGGGE6szu7QVQwh0AQOVOEGXfVWgTrKyDW9Pq5FQDq6bvyvjUHPZW7z6fFcFWDdkOnaQOcOrmVYdvTWmmlGt44vajyo//iMp4gZGR0vstEaDaXMJuOeOUG73DHzmcb3TtsJ8jqvZO+wDaD6NvrAzY6h4RQIQRUiBnw2cxWs8VKz8CJRdoSHVb2+JfVflPfGNDf+1Wj4yHzYDaLml8MglGNY8MvPnD8pM0TOZO+bP6KopLC1JAvCJCUXMY1x9ZH700s8nllyFqccmkeMJNrEgwmV07GZ4V87HVQsbC76YkRlWmwBD/J6s/NLpy9QzpLtFIETUMbnYPyF2skwlCDIQ1OoSxqINiscTr0n/o65M0w+WWsd0s5W+tMmE6t1Nqr1ZkqayoxloK0OPXbhQ86a6zeKwqUWfPuTExzFMonFIbrb6uTxca2rM4="
 branches:
   only:
-    - master
-
+  - master
 before_script:
-  - cd app
-  - npm install
-
+- cd app
+- npm install
 jobs:
   include:
-    - node_js: 8
-      script:
-        - npm run test
-    - node_js: 10
-      script:
-        - npm run test
-    - node_js: 13
-      script:
-        - npm run test
-        - npm run coveralls
-        - npm run codacy
-        - sonar-scanner
+  - node_js: 8
+    script:
+    - npm run test
+  - node_js: 10
+    script:
+    - npm run test
+  - node_js: 13
+    script:
+    - npm run test
+    - npm run coveralls
+    - npm run codacy
+    - sonar-scanner
