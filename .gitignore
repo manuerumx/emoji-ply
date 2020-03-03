@@ -68,3 +68,6 @@ typings/
 
 # Visual Studio Code
 .vscode
+
+# Sonar
+app/.scannerwork
