@@ -45,7 +45,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "jest-sonar-reporter": "^2.0.0",
-    "snyk": "^1.336.0"
+    "snyk": "^1.341.1"
   },
   "snyk": true
 }
